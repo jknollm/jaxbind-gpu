@@ -1,4 +1,4 @@
-"""Compute a NUFFT and differentiate a real loss in the source strengths."""
+"""Use the optimized native cuFINUFFT adapter with reusable plans."""
 
 import jax
 import jax.numpy as jnp

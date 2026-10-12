@@ -29,7 +29,8 @@ def main():
     for example in examples:
         dependency = {
             "torch_function": "torch",
-            "nufft_demo": "cufinufft",
+            "nufft_native": "cufinufft",
+            "nufft_python": "cufinufft",
             "image_filter": "scipy",
             "warp_sparse": "warp",
         }.get(example.stem)
@@ -41,11 +42,11 @@ def main():
             print(f"Skipping {example.name}: install {dependency}", flush=True)
             skipped += 1
             continue
-        if example.stem == "nufft_demo" and not list(
+        if example.stem == "nufft_native" and not list(
             (ROOT / "examples/cufinufft_demo").glob("_bridge*.so")
         ):
             print(
-                "Skipping nufft_demo.py: run python examples/cufinufft_demo/build.py",
+                "Skipping nufft_native.py: run python examples/cufinufft_demo/build.py",
                 flush=True,
             )
             skipped += 1

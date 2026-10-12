@@ -1,4 +1,8 @@
-# cuFINUFFT integration example
+# Advanced, optimized cuFINUFFT example
+
+For a small binding of cuFINUFFT's existing Python functions, start with
+[nufft_python.py](../nufft_python.py). This advanced example adds native execution,
+plan reuse, multidimensional transforms and coordinate derivatives.
 
 This adapter is separate from the binding package. Build its native operation
 against the installed public C ABI header, then run the self-checking example:
@@ -6,7 +10,7 @@ against the installed public C ABI header, then run the self-checking example:
 ```sh
 .venv/bin/python -m pip install '.[cuda12,demos]'
 .venv/bin/python examples/cufinufft_demo/build.py
-.venv/bin/python scripts/run_gpu.py --wait 300 examples/nufft_demo.py
+.venv/bin/python scripts/run_gpu.py --wait 300 examples/nufft_native.py
 ```
 
 The native adapter needs a C++17 compiler and pybind11. It does not need CUDA or

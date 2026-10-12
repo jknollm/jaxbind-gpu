@@ -97,7 +97,14 @@ resource caches and runtime diagnostics.
 ## Examples
 
 Start with [array_function.py](examples/array_function.py), which checks values,
-derivatives and batching. The [example guide](examples/README.md) covers library
+derivatives and batching. The cuFINUFFT examples show two integration approaches:
+
+| Example | Approach |
+| --- | --- |
+| [Minimal Python](examples/nufft_python.py) | Existing Python functions, one `bind` call and strength derivatives with fixed coordinates; no separate adapter build |
+| [Advanced, optimized native](examples/nufft_native.py) | Compiled C ABI adapter, reusable plans, native batching and coordinate derivatives |
+
+The [example guide](examples/README.md) covers library
 functions, return-only code, Torch, Warp, explicit buffers, cached plans, CUDA kernels
 and native C/C++ providers. Each example checks an independent numerical result.
 

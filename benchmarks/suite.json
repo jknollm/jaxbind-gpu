@@ -1,0 +1,497 @@
+[
+  {
+    "name": "dispatch",
+    "arguments": [
+      "scripts/benchmark_dispatch.py",
+      "--eager",
+      "--graphs",
+      "--allocation-forwarding",
+      "--ffi-reference",
+      "--count",
+      "32",
+      "--repeats",
+      "9"
+    ],
+    "kind": "runtime"
+  },
+  {
+    "name": "ffi-dispatch",
+    "arguments": [
+      "scripts/benchmark_dispatch.py",
+      "--sizes",
+      "4096",
+      "1048576",
+      "--ffi-reference",
+      "--derivatives",
+      "--count",
+      "64",
+      "--repeats",
+      "9"
+    ],
+    "kind": "runtime"
+  },
+  {
+    "name": "nonlinear",
+    "arguments": [
+      "scripts/benchmark_nonlinear.py",
+      "--sizes",
+      "4096",
+      "1048576",
+      "16777216",
+      "--count",
+      "32",
+      "--repeats",
+      "9"
+    ],
+    "kind": "runtime"
+  },
+  {
+    "name": "integrations",
+    "arguments": [
+      "scripts/benchmark_applications.py",
+      "--apps",
+      "spectral_poisson",
+      "dense_solve",
+      "sparse_diffusion",
+      "image_blur",
+      "torch_convolution",
+      "nufft_synthesis",
+      "--native-return",
+      "--count",
+      "30",
+      "--repeats",
+      "7",
+      "--torch-path",
+      ".torch-benchmark"
+    ],
+    "kind": "runtime"
+  },
+  {
+    "name": "primitives",
+    "arguments": [
+      "scripts/benchmark_applications.py",
+      "--apps",
+      "row_reduction",
+      "prefix_scan",
+      "batched_gemm",
+      "special_erf",
+      "sort",
+      "reaction_diffusion",
+      "--native-return",
+      "--jax-reference",
+      "--count",
+      "30",
+      "--repeats",
+      "7"
+    ],
+    "kind": "runtime"
+  },
+  {
+    "name": "graphs",
+    "arguments": [
+      "scripts/benchmark_applications.py",
+      "--apps",
+      "spectral_poisson",
+      "--sizes",
+      "medium",
+      "--graphs",
+      "--native-graphs",
+      "--iterations",
+      "32",
+      "--unroll",
+      "--workspace-bytes",
+      "25165824",
+      "--count",
+      "8",
+      "--repeats",
+      "7"
+    ],
+    "kind": "runtime"
+  },
+  {
+    "name": "graphs-additional",
+    "arguments": [
+      "scripts/benchmark_applications.py",
+      "--apps",
+      "image_blur",
+      "special_erf",
+      "reaction_diffusion",
+      "--sizes",
+      "medium",
+      "--graphs",
+      "--native-graphs",
+      "--iterations",
+      "32",
+      "--unroll",
+      "--count",
+      "8",
+      "--repeats",
+      "7"
+    ],
+    "kind": "runtime"
+  },
+  {
+    "name": "cached-applications",
+    "arguments": [
+      "scripts/benchmark_applications.py",
+      "--apps",
+      "image_blur",
+      "spectral_poisson",
+      "row_reduction",
+      "prefix_scan",
+      "special_erf",
+      "sort",
+      "reaction_diffusion",
+      "--cached",
+      "--native-return",
+      "--count",
+      "32",
+      "--repeats",
+      "9"
+    ],
+    "kind": "runtime"
+  },
+  {
+    "name": "cached-fft",
+    "arguments": [
+      "scripts/benchmark_applications.py",
+      "--apps",
+      "spectral_poisson",
+      "--cached",
+      "--native-return",
+      "--workspace-bytes",
+      "25165824",
+      "--count",
+      "32",
+      "--repeats",
+      "9"
+    ],
+    "kind": "runtime"
+  },
+  {
+    "name": "cached-memory",
+    "arguments": [
+      "scripts/benchmark_memory.py",
+      "--apps",
+      "image_blur",
+      "spectral_poisson",
+      "row_reduction",
+      "prefix_scan",
+      "special_erf",
+      "sort",
+      "reaction_diffusion",
+      "--variants",
+      "jaxbind_gpu",
+      "jaxbind_gpu_cached",
+      "--count",
+      "32"
+    ],
+    "kind": "memory"
+  },
+  {
+    "name": "cached-fft-memory",
+    "arguments": [
+      "scripts/benchmark_memory.py",
+      "--apps",
+      "spectral_poisson",
+      "--variants",
+      "jaxbind_gpu",
+      "jaxbind_gpu_cached",
+      "--workspace-bytes",
+      "25165824",
+      "--count",
+      "32"
+    ],
+    "kind": "memory"
+  },
+  {
+    "name": "memory",
+    "arguments": [
+      "scripts/benchmark_memory.py",
+      "--apps",
+      "spectral_poisson",
+      "dense_solve",
+      "sparse_diffusion",
+      "image_blur",
+      "torch_convolution",
+      "nufft_synthesis",
+      "row_reduction",
+      "prefix_scan",
+      "batched_gemm",
+      "special_erf",
+      "sort",
+      "reaction_diffusion",
+      "--variants",
+      "direct_library",
+      "jaxbind_gpu",
+      "--count",
+      "4",
+      "--torch-path",
+      ".torch-benchmark"
+    ],
+    "kind": "memory"
+  },
+  {
+    "name": "graph-memory",
+    "arguments": [
+      "scripts/benchmark_memory.py",
+      "--apps",
+      "spectral_poisson",
+      "--variants",
+      "direct_library_graph",
+      "jaxbind_gpu_graph",
+      "--count",
+      "4",
+      "--iterations",
+      "32",
+      "--unroll",
+      "--workspace-bytes",
+      "25165824"
+    ],
+    "kind": "memory"
+  },
+  {
+    "name": "graph-memory-additional",
+    "arguments": [
+      "scripts/benchmark_memory.py",
+      "--apps",
+      "image_blur",
+      "special_erf",
+      "reaction_diffusion",
+      "--variants",
+      "direct_library_graph",
+      "jaxbind_gpu_graph",
+      "--count",
+      "4",
+      "--iterations",
+      "32",
+      "--unroll"
+    ],
+    "kind": "memory"
+  },
+  {
+    "name": "output-allocation",
+    "arguments": [
+      "scripts/benchmark_output_allocation.py"
+    ],
+    "kind": "runtime"
+  },
+  {
+    "name": "output-allocation-memory",
+    "arguments": [
+      "scripts/benchmark_output_allocation.py",
+      "--memory",
+      "--sizes",
+      "1048576",
+      "--count",
+      "4"
+    ],
+    "kind": "memory"
+  },
+  {
+    "name": "cached-image",
+    "arguments": [
+      "scripts/benchmark_applications.py",
+      "--apps",
+      "image_blur",
+      "--cached",
+      "--native-return",
+      "--workspace-bytes",
+      "8192",
+      "--count",
+      "32",
+      "--repeats",
+      "9"
+    ],
+    "kind": "runtime"
+  },
+  {
+    "name": "cached-image-memory",
+    "arguments": [
+      "scripts/benchmark_memory.py",
+      "--apps",
+      "image_blur",
+      "--variants",
+      "jaxbind_gpu",
+      "jaxbind_gpu_cached",
+      "--workspace-bytes",
+      "8192",
+      "--count",
+      "32"
+    ],
+    "kind": "memory"
+  },
+  {
+    "name": "interfaces",
+    "arguments": [
+      "scripts/benchmark_interfaces.py",
+      "--torch-path",
+      ".torch-benchmark",
+      "--count",
+      "32",
+      "--repeats",
+      "9"
+    ],
+    "kind": "runtime"
+  },
+  {
+    "name": "cached-wrapper",
+    "arguments": [
+      "scripts/compare_cached_wrapper.py",
+      "--reference-path",
+      ".references/cached-reference"
+    ],
+    "kind": "runtime"
+  },
+  {
+    "name": "released-wrapper",
+    "arguments": [
+      "scripts/compare_wrapper.py",
+      "--reference-path",
+      ".references/gpu-reference"
+    ],
+    "kind": "runtime"
+  },
+  {
+    "name": "provider",
+    "arguments": [
+      "scripts/benchmark_provider.py",
+      "--count",
+      "32",
+      "--repeats",
+      "9"
+    ],
+    "kind": "runtime"
+  },
+  {
+    "name": "warp",
+    "arguments": [
+      "scripts/benchmark_applications.py",
+      "--apps",
+      "warp_sparse",
+      "--native-return",
+      "--native-graphs",
+      "--count",
+      "32",
+      "--repeats",
+      "9"
+    ],
+    "kind": "runtime"
+  },
+  {
+    "name": "warp-cached",
+    "arguments": [
+      "scripts/benchmark_applications.py",
+      "--apps",
+      "warp_sparse",
+      "--native-return",
+      "--native-graphs",
+      "--count",
+      "32",
+      "--repeats",
+      "9",
+      "--cached"
+    ],
+    "kind": "runtime"
+  },
+  {
+    "name": "warp-command-buffer",
+    "arguments": [
+      "scripts/benchmark_applications.py",
+      "--apps",
+      "warp_sparse",
+      "--native-return",
+      "--native-graphs",
+      "--count",
+      "32",
+      "--repeats",
+      "9",
+      "--graphs"
+    ],
+    "kind": "runtime"
+  },
+  {
+    "name": "warp-memory-small",
+    "arguments": [
+      "scripts/benchmark_memory.py",
+      "--apps",
+      "warp_sparse",
+      "--variants",
+      "native_return",
+      "direct_library",
+      "direct_library_graph",
+      "jax_allocation_control",
+      "jaxbind_gpu",
+      "jaxbind_gpu_cached",
+      "jaxbind_gpu_graph",
+      "--size",
+      "small",
+      "--count",
+      "32"
+    ],
+    "kind": "memory"
+  },
+  {
+    "name": "warp-memory-medium",
+    "arguments": [
+      "scripts/benchmark_memory.py",
+      "--apps",
+      "warp_sparse",
+      "--variants",
+      "native_return",
+      "direct_library",
+      "direct_library_graph",
+      "jax_allocation_control",
+      "jaxbind_gpu",
+      "jaxbind_gpu_cached",
+      "jaxbind_gpu_graph",
+      "--size",
+      "medium",
+      "--count",
+      "32"
+    ],
+    "kind": "memory"
+  },
+  {
+    "name": "wrapper-memory",
+    "arguments": [
+      "scripts/compare_wrapper_memory.py",
+      "--count",
+      "4"
+    ],
+    "kind": "memory",
+    "requires": [
+      "cached-wrapper"
+    ]
+  },
+  {
+    "name": "sparse-graphs",
+    "kind": "runtime",
+    "arguments": [
+      "scripts/benchmark_applications.py",
+      "--apps",
+      "sparse_diffusion",
+      "--sizes",
+      "small",
+      "--graphs",
+      "--check-only"
+    ],
+    "expected_exit": 1,
+    "expected_error": "the current stream is capturing, so D2H transfers are disallowed"
+  },
+  {
+    "name": "gemm-graph-check",
+    "kind": "runtime",
+    "arguments": [
+      "scripts/benchmark_applications.py",
+      "--apps",
+      "batched_gemm",
+      "--sizes",
+      "small",
+      "--graphs",
+      "--check-only"
+    ],
+    "expected_exit": 1,
+    "expected_error": "calling cuBLAS API during stream capture is currently unsupported"
+  }
+]

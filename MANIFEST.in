@@ -1,0 +1,17 @@
+include cpp/bridge.cc
+include cpp/kernel_bridge.cc
+include cpp/kernel_bridge.h
+include cpp/inline_storage.h
+include cpp/graph_cache.h
+include THIRD_PARTY.md
+recursive-include tests *.py *.cc
+recursive-include examples *.py *.cc *.h *.md
+recursive-include scripts *.py
+recursive-include benchmarks *.py *.md
+include benchmarks/dispatch_reference.cc
+include benchmarks/nonlinear_reference.cc
+include benchmarks/provider_reference.cc
+recursive-include docs *.md
+include benchmarks/suite.json
+prune benchmarks/results
+exclude validation*.json

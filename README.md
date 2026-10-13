@@ -107,6 +107,8 @@ derivatives and batching. The cuFINUFFT examples show two integration approaches
 The [example guide](examples/README.md) covers library
 functions, return-only code, Torch, Warp, explicit buffers, cached plans, CUDA kernels
 and native C/C++ providers. Each example checks an independent numerical result.
+The [SHTns Python example](examples/shtns_python.py) shows spherical harmonic
+transforms on GPU arrays with scalar derivative rules and vector outputs.
 
 ```sh
 python scripts/run_gpu.py examples/array_function.py

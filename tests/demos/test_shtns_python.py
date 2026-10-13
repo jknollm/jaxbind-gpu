@@ -23,6 +23,10 @@ def test_scalar_derivatives_and_batching(transform):
     host[sh.idx(1, 0)] = -0.4
     host[sh.idx(1, 1)] = 0.3 + 0.2j
     coefficients = jnp.asarray(host)
+    cotangent = np.zeros_like(host)
+    cotangent[sh.idx(0, 0)] = 0.6
+    cotangent[sh.idx(1, 0)] = 0.7
+    cotangent[sh.idx(1, 1)] = 0.5 + 0.8j
     north = sh.gauss_wts()
     weights = np.concatenate((north, north[::-1])) * (2 * np.pi / sh.nphi)
 
@@ -30,9 +34,15 @@ def test_scalar_derivatives_and_batching(transform):
         field = transform.synthesis(a)
         return 0.5 * jnp.sum(jnp.asarray(weights) * field**2)
 
+    def analysis_loss(field):
+        return jnp.real(jnp.sum(jnp.asarray(cotangent) * transform.analysis(field)))
+
     with jax.transfer_guard_device_to_host("disallow"):
         field = transform.synthesis(coefficients).block_until_ready()
         recovered = transform.analysis(field).block_until_ready()
+        analysis_tangent = jax.jvp(transform.analysis, (field,), (field,))[1]
+        analysis_tangent.block_until_ready()
+        analysis_gradient = jax.jit(jax.grad(analysis_loss))(field).block_until_ready()
         gradient = jax.jit(jax.grad(energy))
         actual_gradient = gradient(coefficients).block_until_ready()
         hessian = jax.jvp(gradient, (coefficients,), (coefficients,))[1]
@@ -53,10 +63,19 @@ def test_scalar_derivatives_and_batching(transform):
         )
     )
     expected_gradient = np.where(sh.m == 0, 1, 2) * np.conj(host)
+    expected_analysis_gradient = weights * (
+        0.6 / np.sqrt(4 * np.pi)
+        + 0.7 * np.sqrt(3 / (4 * np.pi)) * cos_theta
+        + np.real(
+            (0.5 - 0.8j) * -np.sqrt(3 / (8 * np.pi)) * sin_theta * np.exp(1j * phi)
+        )
+    )
     # Gaussian quadrature is exact for these low harmonics; allow FP64 roundoff.
     for actual, wanted in (
         (field, expected),
         (recovered, host),
+        (analysis_tangent, host),
+        (analysis_gradient, expected_analysis_gradient),
         (actual_gradient, expected_gradient),
         (hessian, expected_gradient),
         (batched, np.stack((expected, 2 * expected))),

@@ -83,7 +83,7 @@ class SphericalTransform:
     def direct_analysis(self, *fields):
         with self._lock:
             # The on-device FFT overwrites SHTns's analysis inputs. JAX inputs
-            # must remain immutable; both benchmark paths use these copies.
+            # must remain immutable.
             return self.plan.analys(*(field.copy() for field in fields))
 
 

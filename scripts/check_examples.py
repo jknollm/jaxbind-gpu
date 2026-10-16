@@ -33,6 +33,7 @@ def main():
             "nufft_python": "cufinufft",
             "image_filter": "scipy",
             "warp_sparse": "warp",
+            "shtns_python": "shtns",
         }.get(example.stem)
         if (
             dependency
@@ -40,6 +41,13 @@ def main():
             and importlib.util.find_spec(dependency) is None
         ):
             print(f"Skipping {example.name}: install {dependency}", flush=True)
+            skipped += 1
+            continue
+        if (
+            example.stem == "shtns_python"
+            and importlib.util.find_spec("_shtns_cuda") is None
+        ):
+            print("Skipping shtns_python.py: build SHTns with CUDA support", flush=True)
             skipped += 1
             continue
         if example.stem == "nufft_native" and not list(

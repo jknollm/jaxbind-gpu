@@ -16,6 +16,7 @@ python scripts/run_gpu.py scripts/check_examples.py
 | --- | --- |
 | [array_function.py](array_function.py) | One `bind` call, direct output, JVP/VJP, gradient, Hessian and batching |
 | [nufft_python.py](nufft_python.py) | cuFINUFFT's Python functions, fixed GPU coordinates and a linear transpose |
+| [shtns_python.py](shtns_python.py) | SHTns's Python frontend, scalar JVP/VJP, multiple outputs and input preservation |
 | [image_filter.py](image_filter.py) | Library function, static keywords and a linear transpose |
 | [return_function.py](return_function.py) | Return-only CuPy function with output allocation forwarding |
 | [torch_function.py](torch_function.py) | Torch views on XLA's stream, direct output and JAX derivatives |
@@ -55,6 +56,45 @@ the plain transpose, not the Hermitian adjoint.
 This example needs no separately compiled adapter. It uses the convenience
 API's per-call plans and supplies no plan cache or graph capture. The advanced
 cuFINUFFT example below adds plan reuse, coordinate derivatives and native execution.
+
+### SHTns Python frontend
+
+[shtns_python.py](shtns_python.py) binds scalar synthesis and analysis using
+SHTns's existing `synth` and `analys` methods on CuPy arrays. It also shows
+two-component vector transforms with tuple outputs. Scalar transforms have
+JVP/VJP rules, including Gaussian quadrature weights and the multiplicity of
+packed coefficients with positive azimuthal order. Vector derivatives are not
+supplied. The runnable example checks closed-form spherical harmonics and a
+weighted-energy gradient.
+
+Build [SHTns](https://bitbucket.org/nschaeff/shtns) with its Python and CUDA
+support. SHTns's Python build enables CUDA when `CUDA_PATH` points to a toolkit
+containing nvcc, headers and libraries. FFTW development files and a C compiler
+are also required. With those dependencies installed:
+
+```sh
+git clone https://bitbucket.org/nschaeff/shtns.git
+cd shtns
+CUDA_PATH=/usr/local/cuda PATH=/usr/local/cuda/bin:$PATH python -m pip install .
+```
+
+Then run this example from the jaxbind-gpu checkout:
+
+```sh
+python scripts/run_gpu.py examples/shtns_python.py
+```
+
+The example requires float64/complex128 and enables JAX x64. Its plan uses an
+orthonormal Gaussian grid and theta-contiguous storage. `out="allocate"`
+forwards output allocations into JAX storage. SHTns analysis overwrites its
+spatial inputs during the FFT, so the example copies those inputs on the GPU
+before analysis. Both synthesis and analysis return GPU arrays.
+
+SHTns's frontend synchronizes the whole device before and after each transform,
+which prevents asynchronous overlap and CUDA graph capture. A shared lock
+serializes calls using one plan because SHTns's GPU transforms are not thread-safe.
+See [SHTns's GPU documentation](https://nschaeff.bitbucket.io/shtns/gpu.html).
+SHTns remains an optional dependency; no library-specific code is added to the core.
 
 ## Explicit buffers and native providers
 
@@ -97,7 +137,7 @@ performance and derivative implementation.
 
 ## Optional dependencies
 
-Torch, Warp, SciPy and cuFINUFFT examples run when their dependencies are installed.
+Torch, Warp, SciPy, SHTns and cuFINUFFT examples run when their dependencies are installed.
 The runner reports skipped examples explicitly. To use an isolated Torch
 installation:
 
